@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app 
+    xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="			http://java.sun.com/xml/ns/j2ee			http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+    <servlet>
+        <servlet-name>GraphQLEndpoint</servlet-name>
+        <servlet-class>com.recflix.app.GraphQLEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GraphQLEndpoint</servlet-name>
+        <url-pattern>/graphqlApi</url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>com.recflix.filters.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/graphqlApi/*</url-pattern>
+    </filter-mapping>
+</web-app>

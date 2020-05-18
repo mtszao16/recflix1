@@ -1,0 +1,112 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  allUsers: [User]
+  allUserInteractions: [UserInteraction]
+  allMovies(filter: MovieFilter): [Movie]
+  allMoviesRecommendation: [MovieRecommendation]
+  allFeedbacks(filter: FeedbackFilter): [Feedback]
+}
+
+type Mutation {
+  createUser(name: String!, authProvider: AuthData!): User
+  signinUser(auth: AuthData): SigninPayload
+  logUserInteraction(
+    type: String!
+    movieId: String
+    amount: Int
+  ): UserInteraction
+  addMovie(
+    name: String!
+    movieUrl: String
+    imageUrl: String
+    bannerImageUrl: String
+    totalDuration: Int
+  ): Movie
+  recordFeedback(rating: Int!, movieId: String): Feedback
+  addWatchedMovie(movieId: String!, userId: String!): Boolean
+}
+
+extend type User {
+  id: ID!
+  name: String!
+  email: String
+  password: String
+  watchedMovies: [WatchedMovie]
+}
+
+type UserInteraction {
+  id: ID!
+  interactionTime: String!
+  interactionType: String!
+  interactedBy: User!
+  movieId: String
+  value: Float
+  amount: Int
+}
+
+type Movie {
+  id: ID!
+  name: String!
+  movieUrl: String
+  imageUrl: String
+  bannerImageUrl: String
+  totalDuration: Int
+}
+
+type WatchedMovie {
+  id: ID!
+  name: String!
+  movieUrl: String
+  imageUrl: String
+  bannerImageUrl: String
+  totalDuration: Int
+  watchedCount: Int
+  watchedDuration: Int
+}
+
+type MovieRecommendation {
+  id: ID!
+  name: String!
+  movieUrl: String
+  imageUrl: String
+  bannerImageUrl: String
+  totalDuration: Int
+  userId: String
+  rating: Float
+}
+
+type Feedback {
+  id: ID!
+  rating: Int!
+  finalRating: Float
+  userId: String
+  movieId: String
+  createdAt: DateTime!
+}
+
+type SigninPayload {
+  token: String
+  user: User
+}
+
+input AuthData {
+  email: String!
+  password: String!
+}
+
+input MovieFilter {
+  id: ID
+  name: String
+}
+
+input FeedbackFilter {
+  id: ID
+  userId: String
+  movieId: String
+}
+
+scalar DateTime

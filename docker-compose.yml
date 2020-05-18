@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  mongodb:
+    container_name: recflix-db
+    image: mongo:3.6
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - recflix_data:/data/db
+    networks:
+      - net
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+  app:
+    restart: always
+    build: ./recflix-backend
+    working_dir: /app
+    volumes:
+      - ./recflix-backend:/app
+      - ~/.m2:/root/.m2
+    command: ["mvn", "clean", "install", "jetty:run"]
+    networks:
+      - net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+
+volumes:
+  recflix_data:
+    external: true
+
+networks:
+  net:
+    driver: bridge
